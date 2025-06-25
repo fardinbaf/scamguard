@@ -3,9 +3,9 @@ import Modal from './Modal';
 import { useAuth } from '../hooks/useAuth';
 import { Report, ReportCategory, TargetType, EvidenceFile } from '../types';
 import { addReport as saveReport } from '../services/reportService';
-import { TARGET_TYPES_OPTIONS, REPORT_CATEGORY_OPTIONS, RECAPTCHA_SITE_KEY } from '../constants';
+import { TARGET_TYPES_OPTIONS, REPORT_CATEGORY_OPTIONS } from '../constants'; // RECAPTCHA_SITE_KEY removed
 import LoadingSpinner from './LoadingSpinner';
-import ReCAPTCHA from 'react-google-recaptcha';
+// import ReCAPTCHA from 'react-google-recaptcha'; // Removed
 
 interface ReportFormModalProps {
   isOpen: boolean;
@@ -23,10 +23,10 @@ const ReportFormModal: React.FC<ReportFormModalProps> = ({ isOpen, onClose, onRe
   const [description, setDescription] = useState('');
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [contactInfo, setContactInfo] = useState('');
-  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+  // const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null); // Removed
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const recaptchaRef = useRef<ReCAPTCHA>(null);
+  // const recaptchaRef = useRef<ReCAPTCHA>(null); // Removed
 
   const resetForm = () => {
     setTitle('');
@@ -35,8 +35,8 @@ const ReportFormModal: React.FC<ReportFormModalProps> = ({ isOpen, onClose, onRe
     setDescription('');
     setSelectedFiles([]);
     setContactInfo('');
-    setRecaptchaToken(null);
-    recaptchaRef.current?.reset();
+    // setRecaptchaToken(null); // Removed
+    // recaptchaRef.current?.reset(); // Removed
     setError('');
   };
 
@@ -62,10 +62,10 @@ const ReportFormModal: React.FC<ReportFormModalProps> = ({ isOpen, onClose, onRe
       setError('Title and Description are required.');
       return;
     }
-    if (!recaptchaToken) {
-      setError('Please complete the reCAPTCHA verification.');
-      return;
-    }
+    // if (!recaptchaToken) { // Removed
+    //   setError('Please complete the reCAPTCHA verification.'); // Removed
+    //   return; // Removed
+    // } // Removed
     setError('');
     setIsLoading(true);
 
@@ -103,14 +103,14 @@ const ReportFormModal: React.FC<ReportFormModalProps> = ({ isOpen, onClose, onRe
         contactInfo: contactInfo.trim() || undefined,
       };
 
-      const newReport = await saveReport(reportData, currentUser); // `addReport` in service doesn't use recaptchaToken for this demo
+      const newReport = await saveReport(reportData, currentUser);
       onReportSubmitted(newReport);
       onClose(); 
     } catch (err) {
       console.error("Failed to submit report or process files:", err);
       setError('Failed to submit report. Please try again.');
-      setRecaptchaToken(null);
-      recaptchaRef.current?.reset();
+      // setRecaptchaToken(null); // Removed
+      // recaptchaRef.current?.reset(); // Removed
     } finally {
       setIsLoading(false);
     }
@@ -167,6 +167,8 @@ const ReportFormModal: React.FC<ReportFormModalProps> = ({ isOpen, onClose, onRe
           <input type="text" id="report-contact" value={contactInfo} onChange={(e) => setContactInfo(e.target.value)} className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" />
         </div>
         
+        {/* ReCAPTCHA component removed */}
+        {/*
         <div className="flex justify-center my-3">
             <ReCAPTCHA
               ref={recaptchaRef}
@@ -179,6 +181,7 @@ const ReportFormModal: React.FC<ReportFormModalProps> = ({ isOpen, onClose, onRe
               }}
             />
         </div>
+        */}
 
         <button
           type="submit"
