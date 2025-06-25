@@ -3,18 +3,8 @@ import { ReportCategory, ReportStatus, TargetType } from './types';
 
 export const APP_NAME = "ScamGuard";
 
-// Test key from Google reCAPTCHA documentation: https://developers.google.com/recaptcha/docs/faq
-const FALLBACK_RECAPTCHA_SITE_KEY = "6Ld4Rm0rAAAAAK_5rLlDHh9dVgB5HP6R7PVX4ru1";
-
-/**
- * Google reCAPTCHA Site Key.
- * For local development, it defaults to a test key.
- * For Netlify deployment, set `window.VITE_RECAPTCHA_SITE_KEY` via Netlify's Snippet Injection.
- * Example snippet to inject before </body> in Netlify UI:
- * <script>window.VITE_RECAPTCHA_SITE_KEY = 'YOUR_ACTUAL_RECAPTCHA_SITE_KEY';</script>
- * (Replace 'YOUR_ACTUAL_RECAPTCHA_SITE_KEY' with the key from your Netlify environment variable or directly).
- */
-export const RECAPTCHA_SITE_KEY = (window as any).VITE_RECAPTCHA_SITE_KEY || FALLBACK_RECAPTCHA_SITE_KEY;
+// Google reCAPTCHA has been removed from this version of the project.
+// export const RECAPTCHA_SITE_KEY = (window as any).VITE_RECAPTCHA_SITE_KEY || FALLBACK_RECAPTCHA_SITE_KEY;
 
 
 export const TARGET_TYPES_OPTIONS = Object.values(TargetType);
