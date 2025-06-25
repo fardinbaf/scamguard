@@ -4,7 +4,7 @@ import { ReportCategory, ReportStatus, TargetType } from './types';
 export const APP_NAME = "ScamGuard";
 
 // Test key from Google reCAPTCHA documentation: https://developers.google.com/recaptcha/docs/faq
-const FALLBACK_RECAPTCHA_SITE_KEY = "6LcZmm0rAAAAAA4xZJUHw_s_KhgZ7htm5iiravnE";
+const FALLBACK_RECAPTCHA_SITE_KEY = "6Ld4Rm0rAAAAAK_5rLlDHh9dVgB5HP6R7PVX4ru1";
 
 /**
  * Google reCAPTCHA Site Key.
