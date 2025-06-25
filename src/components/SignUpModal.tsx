@@ -3,8 +3,8 @@ import Modal from './Modal';
 import { useAuth } from '../hooks/useAuth';
 import LoadingSpinner from './LoadingSpinner';
 import { verifyUser as serviceVerifyUser } from '../services/authService';
-import ReCAPTCHA from 'react-google-recaptcha';
-import { RECAPTCHA_SITE_KEY } from '../constants';
+// import ReCAPTCHA from 'react-google-recaptcha'; // Removed
+// import { RECAPTCHA_SITE_KEY } from '../constants'; // Removed
 
 interface SignUpModalProps {
   isOpen: boolean;
@@ -18,7 +18,7 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, onClose, onSwitchToLo
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+  // const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null); // Removed
   const [verificationCode, setVerificationCode] = useState('');
   
   const [error, setError] = useState('');
@@ -26,14 +26,14 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, onClose, onSwitchToLo
   const { signup, login } = useAuth();
   const [currentStep, setCurrentStep] = useState<SignUpStep>("details");
   const [pendingVerificationIdentifier, setPendingVerificationIdentifier] = useState<string | null>(null);
-  const recaptchaRef = useRef<ReCAPTCHA>(null);
+  // const recaptchaRef = useRef<ReCAPTCHA>(null); // Removed
 
   const resetForm = () => {
     setIdentifier('');
     setPassword('');
     setConfirmPassword('');
-    setRecaptchaToken(null);
-    recaptchaRef.current?.reset();
+    // setRecaptchaToken(null); // Removed
+    // recaptchaRef.current?.reset(); // Removed
     setVerificationCode('');
     setError('');
     setCurrentStep("details");
@@ -60,10 +60,10 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, onClose, onSwitchToLo
       setError('Password must be at least 6 characters long.');
       return;
     }
-    if (!recaptchaToken) {
-      setError('Please complete the reCAPTCHA verification.');
-      return;
-    }
+    // if (!recaptchaToken) { // Removed
+    //   setError('Please complete the reCAPTCHA verification.'); // Removed
+    //   return; // Removed
+    // } // Removed
     setError('');
     setIsLoading(true);
     try {
@@ -73,13 +73,13 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, onClose, onSwitchToLo
         setCurrentStep("verify");
       } else {
         setError('Sign up failed. This identifier might already be in use.');
-        recaptchaRef.current?.reset();
-        setRecaptchaToken(null);
+        // recaptchaRef.current?.reset(); // Removed
+        // setRecaptchaToken(null); // Removed
       }
     } catch (err) {
       setError('An unexpected error occurred during signup. Please try again.');
-      recaptchaRef.current?.reset();
-      setRecaptchaToken(null);
+      // recaptchaRef.current?.reset(); // Removed
+      // setRecaptchaToken(null); // Removed
       console.error(err);
     } finally {
       setIsLoading(false);
@@ -168,6 +168,8 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, onClose, onSwitchToLo
             />
           </div>
           
+          {/* ReCAPTCHA component removed */}
+          {/* 
           <div className="flex justify-center">
             <ReCAPTCHA
               ref={recaptchaRef}
@@ -180,6 +182,7 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, onClose, onSwitchToLo
               }}
             />
           </div>
+          */}
 
           <button
             type="submit"
@@ -225,7 +228,7 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, onClose, onSwitchToLo
             </button>
             <p className="text-sm text-center text-gray-600">
                 Didn't receive a code?{' '}
-                <button type="button" onClick={() => { setError(''); setCurrentStep("details"); recaptchaRef.current?.reset(); setRecaptchaToken(null);}} className="font-medium text-blue-600 hover:text-blue-500">
+                <button type="button" onClick={() => { setError(''); setCurrentStep("details"); /* recaptchaRef.current?.reset(); setRecaptchaToken(null); */ }} className="font-medium text-blue-600 hover:text-blue-500">
                  Try signup again
                 </button>
             </p>
