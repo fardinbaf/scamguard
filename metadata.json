@@ -1,0 +1,6 @@
+{
+  "name": "ScamGuard",
+  "description": "A community-driven platform to report and search for scams and spam, requiring user authentication for reporting and managing reports.",
+  "requestFramePermissions": [],
+  "prompt": ""
+}
