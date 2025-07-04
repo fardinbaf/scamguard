@@ -63,6 +63,13 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "reports"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "comments_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
           }
         ]
       }
@@ -162,7 +169,15 @@ export interface Database {
           title?: string
           title_description_tokens?: unknown | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "reports_reported_by_id_fkey"
+            columns: ["reported_by_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
       }
     }
     Views: {
