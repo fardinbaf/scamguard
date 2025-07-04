@@ -130,42 +130,50 @@ export interface Database {
           is_banned?: boolean
           updated_at?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "profiles_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       reports: {
         Row: {
-          category: string
+          category: Database["public"]["Enums"]["report_category"]
           contact_info: string | null
           created_at: string
           description: string
           id: string
-          reported_by_id: string | null
-          status: string
-          target_type: string
+          reported_by_id: string
+          status: Database["public"]["Enums"]["report_status"]
+          target_type: Database["public"]["Enums"]["target_type"]
           title: string
           title_description_tokens: unknown | null
         }
         Insert: {
-          category: string
+          category: Database["public"]["Enums"]["report_category"]
           contact_info?: string | null
           created_at?: string
           description: string
           id?: string
-          reported_by_id?: string | null
-          status?: string
-          target_type: string
+          reported_by_id: string
+          status?: Database["public"]["Enums"]["report_status"]
+          target_type: Database["public"]["Enums"]["target_type"]
           title: string
           title_description_tokens?: unknown | null
         }
         Update: {
-          category?: string
+          category?: Database["public"]["Enums"]["report_category"]
           contact_info?: string | null
           created_at?: string
           description?: string
           id?: string
-          reported_by_id?: string | null
-          status?: string
-          target_type?: string
+          reported_by_id?: string
+          status?: Database["public"]["Enums"]["report_status"]
+          target_type?: Database["public"]["Enums"]["target_type"]
           title?: string
           title_description_tokens?: unknown | null
         }
@@ -180,14 +188,16 @@ export interface Database {
         ]
       }
     }
+    Views: {
+      [_ in never]: never
+    }
     Functions: {
-      handle_new_user: {
-        Args: Record<PropertyKey, never>
-        Returns: unknown
-      }
+      [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      report_category: "Scam" | "Spam" | "Phishing" | "Malware"
+      report_status: "Pending" | "Approved" | "Rejected"
+      target_type: "Business" | "Person" | "Company" | "Website" | "Other"
     }
     CompositeTypes: {
       [_ in never]: never
