@@ -6,7 +6,7 @@ import { getAdvertisementConfig, saveAdvertisementConfig } from '../services/adv
 import LoadingSpinner from '../components/LoadingSpinner';
 
 const AdminAdvertisementPage: React.FC = () => {
-  const [adConfig, setAdConfig] = useState<AdvertisementConfig>({ is_enabled: false });
+  const [adConfig, setAdConfig] = useState<AdvertisementConfig>({ is_enabled: false, image_url: null, target_url: null });
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isFetching, setIsFetching] = useState(true);
@@ -64,7 +64,7 @@ const AdminAdvertisementPage: React.FC = () => {
   };
   
   const handleRemoveImage = () => {
-    setAdConfig(prev => ({ ...prev, image_url: undefined, publicURL: undefined }));
+    setAdConfig(prev => ({ ...prev, image_url: null, publicURL: undefined }));
     setPreviewImage(undefined);
     setImageFile(null);
     const fileInput = document.getElementById('imageUpload') as HTMLInputElement;
