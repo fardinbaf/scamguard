@@ -56,22 +56,7 @@ export interface Database {
           text?: string
           user_id?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "comments_report_id_fkey"
-            columns: ["report_id"]
-            isOneToOne: false
-            referencedRelation: "reports"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "comments_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          }
-        ]
+        Relationships: []
       }
       evidence_files: {
         Row: {
@@ -98,15 +83,7 @@ export interface Database {
           report_id?: string
           size?: number | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "evidence_files_report_id_fkey"
-            columns: ["report_id"]
-            isOneToOne: false
-            referencedRelation: "reports"
-            referencedColumns: ["id"]
-          }
-        ]
+        Relationships: []
       }
       profiles: {
         Row: {
@@ -169,15 +146,7 @@ export interface Database {
           title?: string
           title_description_tokens?: unknown | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "reports_reported_by_id_fkey"
-            columns: ["reported_by_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          }
-        ]
+        Relationships: []
       }
     }
     Views: {
