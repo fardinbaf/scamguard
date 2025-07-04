@@ -117,3 +117,10 @@ export interface Database {
           updated_at: string | null
         }
         Insert: {
+          id: string
+          identifier?: string | null
+          is_admin?: boolean
+          is_banned?: boolean
+          updated_at?: string | null
+        }
+        Update:
