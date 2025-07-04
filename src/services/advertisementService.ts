@@ -20,7 +20,7 @@ export const getAdvertisementConfig = async (): Promise<AdvertisementConfig> => 
       return { ...data, publicURL: publicUrl };
   }
   
-  return data || { is_enabled: false };
+  return data || { is_enabled: false, image_url: null, target_url: null };
 };
 
 export const saveAdvertisementConfig = async (formData: FormData): Promise<AdvertisementConfig> => {
