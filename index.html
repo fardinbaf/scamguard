@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ScamGuard</title>
+  <script type="importmap">
+{
+  "imports": {
+    "vite": "https://esm.sh/vite@^7.0.0",
+    "react/": "https://esm.sh/react@^19.1.0/",
+    "react": "https://esm.sh/react@^19.1.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.1.0/",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^4.6.0",
+    "react-router-dom": "https://esm.sh/react-router-dom@^7.6.3",
+    "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@^2.50.2"
+  }
+}
+
+// Edge function to handle SPA routing
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+
+const BUCKET_NAME = "site-assets"; // Change this to your bucket name where index.html is stored
+const INDEX_PATH = "index.html";    // Path to your index.html in the bucket
+
+serve(async (req) => {
+  try {
+    const url = new URL(req.url);
+    
+    // Skip API requests and requests for static assets
+    if (url.pathname.startsWith("/api") || 
+        url.pathname.startsWith("/rest") || 
+        url.pathname.startsWith("/storage") ||
+        url.pathname.includes(".")) {
+      // Let these requests pass through to their normal handlers
+      return fetch(req);
+    }
+    
+    // For all other routes, serve the index.html file
+    const supabaseClient = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_ANON_KEY") ?? "",
+      { auth: { persistSession: false } }
+    );
+    
+    // Get the index.html file from storage
+    const { data, error } = await supabaseClient
+      .storage
+      .from(BUCKET_NAME)
+      .download(INDEX_PATH);
+      
+    if (error || !data) {
+      console.error("Error fetching index.html:", error);
+      return new Response("Not Found", { status: 404 });
+    }
+    
+    // Convert the blob to text
+    const html = await data.text();
+    
+    // Return the index.html with appropriate headers
+    return new Response(html, {
+      headers: {
+        "Content-Type": "text/html; charset=utf-8",
+        "Cache-Control": "no-cache, no-store, must-revalidate",
+      },
+    });
+  } catch (error) {
+    console.error("Error in serve-spa edge function:", error);
+    return new Response("Server Error", { status: 500 });
+  }
+});
+
+// Helper function to create Supabase client
+function createClient(supabaseUrl, supabaseKey, options) {
+  return {
+    storage: {
+      from: (bucket) => ({
+        download: async (path) => {
+          try {
+            const res = await fetch(`${supabaseUrl}/storage/v1/object/public/${bucket}/${path}`);
+            if (!res.ok) {
+              return { data: null, error: new Error(`Failed to download: ${res.statusText}`) };
+            }
+            const data = await res.blob();
+            return { data, error: null };
+          } catch (error) {
+            return { data: null, error };
+          }
+        }
+      })
+    }
+  };
+}
+
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body class="bg-gray-100">
+    <div id="root"></div>
+    <script type="module" src="/src/index.tsx"></script>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
