@@ -63,13 +63,6 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "reports"
             referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "comments_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
           }
         ]
       }
@@ -130,69 +123,56 @@ export interface Database {
           is_banned?: boolean
           updated_at?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "profiles_id_fkey"
-            columns: ["id"]
-            isOneToOne: true
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          }
-        ]
+        Relationships: []
       }
       reports: {
         Row: {
-          category: Database["public"]["Enums"]["report_category"]
+          category: string
           contact_info: string | null
           created_at: string
           description: string
           id: string
-          reported_by_id: string
-          status: Database["public"]["Enums"]["report_status"]
-          target_type: Database["public"]["Enums"]["target_type"]
+          reported_by_id: string | null
+          status: string
+          target_type: string
           title: string
           title_description_tokens: unknown | null
         }
         Insert: {
-          category: Database["public"]["Enums"]["report_category"]
+          category: string
           contact_info?: string | null
           created_at?: string
           description: string
           id?: string
-          reported_by_id: string
-          status?: Database["public"]["Enums"]["report_status"]
-          target_type: Database["public"]["Enums"]["target_type"]
+          reported_by_id?: string | null
+          status?: string
+          target_type: string
           title: string
           title_description_tokens?: unknown | null
         }
         Update: {
-          category?: Database["public"]["Enums"]["report_category"]
+          category?: string
           contact_info?: string | null
           created_at?: string
           description?: string
           id?: string
-          reported_by_id?: string
-          status?: Database["public"]["Enums"]["report_status"]
-          target_type?: Database["public"]["Enums"]["target_type"]
+          reported_by_id?: string | null
+          status?: string
+          target_type?: string
           title?: string
           title_description_tokens?: unknown | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "reports_reported_by_id_fkey"
-            columns: ["reported_by_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          }
-        ]
+        Relationships: []
       }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      handle_new_user: {
+        Args: Record<PropertyKey, never>
+        Returns: unknown
+      }
     }
     Enums: {
       report_category: "Scam" | "Spam" | "Phishing" | "Malware"
