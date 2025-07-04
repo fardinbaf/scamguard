@@ -63,13 +63,6 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "reports"
             referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "comments_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
           }
         ]
       }
@@ -123,4 +116,71 @@ export interface Database {
           is_banned?: boolean
           updated_at?: string | null
         }
-        Update:
+        Update: {
+          id?: string
+          identifier?: string | null
+          is_admin?: boolean
+          is_banned?: boolean
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      reports: {
+        Row: {
+          category: string
+          contact_info: string | null
+          created_at: string
+          description: string
+          id: string
+          reported_by_id: string | null
+          status: string
+          target_type: string
+          title: string
+          title_description_tokens: unknown | null
+        }
+        Insert: {
+          category: string
+          contact_info?: string | null
+          created_at?: string
+          description: string
+          id?: string
+          reported_by_id?: string | null
+          status?: string
+          target_type: string
+          title: string
+          title_description_tokens?: unknown | null
+        }
+        Update: {
+          category?: string
+          contact_info?: string | null
+          created_at?: string
+          description?: string
+          id?: string
+          reported_by_id?: string | null
+          status?: string
+          target_type?: string
+          title?: string
+          title_description_tokens?: unknown | null
+        }
+        Relationships: []
+      }
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      handle_new_user: {
+        Args: Record<PropertyKey, never>
+        Returns: unknown
+      }
+    }
+    Enums: {
+      report_category: "Scam" | "Spam" | "Phishing" | "Malware"
+      report_status: "Pending" | "Approved" | "Rejected"
+      target_type: "Business" | "Person" | "Company" | "Website" | "Other"
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
+}
