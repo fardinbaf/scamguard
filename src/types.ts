@@ -72,8 +72,8 @@ export interface Comment {
 
 export interface AdvertisementConfig {
   id?: number;
-  image_url?: string;
-  target_url?: string;
+  image_url: string | null;
+  target_url: string | null;
   is_enabled: boolean;
   publicURL?: string; // To store the public URL for display
 }
