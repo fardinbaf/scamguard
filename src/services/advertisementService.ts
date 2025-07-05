@@ -30,7 +30,7 @@ export const saveAdvertisementConfig = async (formData: FormData): Promise<Adver
   const imageFile = formData.get('image') as File | null;
   const removeImage = formData.get('removeImage') === 'true';
 
-  let imageUrl: string | null = undefined;
+  let imageUrl: string | null | undefined;
 
   // Handle image upload/removal
   if (imageFile && imageFile.size > 0) {
