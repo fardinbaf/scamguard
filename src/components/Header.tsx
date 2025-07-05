@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { APP_NAME } from '../constants';
-import { ShieldIcon, LoginIcon, UserPlusIcon, LogoutIcon, AdminIcon, UserGroupIcon, MegaphoneIcon, MenuIcon, CloseIcon } from './Icons';
+import { ShieldIcon, LoginIcon, UserPlusIcon, LogoutIcon, AdminIcon, UserGroupIcon, MegaphoneIcon, MenuIcon, CloseIcon, UserCircleIcon } from './Icons';
 
 interface HeaderProps {
   onLoginClick: () => void;
@@ -77,7 +77,11 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick, onSignUpClick }) => {
                   </Link>
                 </>
               )}
-              <span className="text-gray-700 hidden lg:inline px-3 py-2 text-sm">Hi, {currentUser?.identifier.split('@')[0]}</span>
+               <Link to="/profile" className="flex items-center text-gray-600 hover:text-blue-600 transition-colors px-3 py-2 rounded-md text-sm font-medium" title="My Profile">
+                  <UserCircleIcon className="w-5 h-5 mr-1" />
+                  <span className="hidden xl:inline">Profile</span>
+                </Link>
+              <span className="text-gray-700 hidden lg:inline px-3 py-2 text-sm">Hi, {currentUser?.fullName || currentUser?.identifier.split('@')[0]}</span>
               <button
                 onClick={handleLogout}
                 className="flex items-center bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"
@@ -133,7 +137,10 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick, onSignUpClick }) => {
                 <div className="pt-2 pb-1 border-t border-gray-200">
                   {isAuthenticated ? (
                       <>
-                        {currentUser && <span className="block px-3 py-2 text-base font-medium text-gray-700">Hi, {currentUser?.identifier.split('@')[0]}</span>}
+                        {currentUser && <span className="block px-3 py-2 text-base font-medium text-gray-700">Hi, {currentUser?.fullName || currentUser?.identifier.split('@')[0]}</span>}
+                         <Link to="/profile" onClick={handleNavLinkClick} className="flex items-center text-gray-600 hover:text-blue-600 hover:bg-gray-50 transition-colors px-3 py-2 rounded-md text-base font-medium" title="My Profile">
+                            <UserCircleIcon className="w-5 h-5 mr-2" /> <span>My Profile</span>
+                         </Link>
                         {isAdmin && (
                             <>
                               <Link to="/admin" onClick={handleNavLinkClick} className="flex items-center text-gray-600 hover:text-blue-600 hover:bg-gray-50 transition-colors px-3 py-2 rounded-md text-base font-medium" title="Admin Dashboard">
