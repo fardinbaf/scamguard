@@ -1,4 +1,5 @@
 
+
 import React, { createContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import { User } from '../types';
 import * as authService from '../services/authService';
@@ -67,6 +68,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
               identifier: supabaseUser.email || 'user',
               isAdmin: false,
               isBanned: false,
+              fullName: null,
+              phoneNumber: null,
+              avatarUrl: null,
             });
           }
         })
@@ -79,6 +83,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             identifier: supabaseUser.email || 'user',
             isAdmin: false,
             isBanned: false,
+            fullName: null,
+            phoneNumber: null,
+            avatarUrl: null,
           });
         });
     }
