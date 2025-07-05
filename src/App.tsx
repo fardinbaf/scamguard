@@ -11,6 +11,7 @@ import ReportDetailsPage from './pages/ReportDetailsPage';
 import AdminDashboardPage from './pages/AdminDashboardPage';
 import UserManagementPage from './pages/UserManagementPage';
 import AdminAdvertisementPage from './pages/AdminAdvertisementPage';
+import ProfilePage from './pages/ProfilePage';
 import LoginModal from './components/LoginModal';
 import SignUpModal from './components/SignUpModal';
 import ReportFormModal from './components/ReportFormModal';
@@ -43,7 +44,7 @@ const AppContent: React.FC = () => {
     closeModal: closeReportModal 
   } = useModal();
 
-  const { isAdmin, isLoading: authIsLoading } = useAuth();
+  const { isAdmin, isAuthenticated, isLoading: authIsLoading } = useAuth();
   
   const handleReportSubmitted = (newReport: Report) => {
     // Pages will refetch data as needed. A global state manager like
@@ -72,6 +73,11 @@ const AppContent: React.FC = () => {
           <Route path="/search" element={<SearchPage />} />
           <Route path="/reports/:id" element={<ReportDetailsPage />} />
           
+          {/* Protected Routes */}
+          {isAuthenticated && (
+            <Route path="/profile" element={<ProfilePage />} />
+          )}
+
           {/* Admin Protected Routes */}
           {isAdmin && (
             <>
