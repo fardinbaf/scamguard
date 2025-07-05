@@ -2,6 +2,9 @@
 export interface User {
   id: string; // Corresponds to auth.users.id
   identifier: string; // email
+  fullName: string | null;
+  phoneNumber: string | null;
+  avatarUrl: string | null;
   isAdmin: boolean;
   isBanned: boolean;
   isVerified?: boolean; // This can be derived from Supabase's user object if needed.
