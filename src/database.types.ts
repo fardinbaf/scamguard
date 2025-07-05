@@ -1,4 +1,5 @@
 
+
 export type Json =
   | string
   | number
@@ -87,24 +88,33 @@ export interface Database {
       }
       profiles: {
         Row: {
+          avatar_url: string | null
+          full_name: string | null
           id: string
           identifier: string | null
           is_admin: boolean
           is_banned: boolean
+          phone_number: string | null
           updated_at: string | null
         }
         Insert: {
+          avatar_url?: string | null
+          full_name?: string | null
           id: string
           identifier?: string | null
           is_admin?: boolean
           is_banned?: boolean
+          phone_number?: string | null
           updated_at?: string | null
         }
         Update: {
+          avatar_url?: string | null
+          full_name?: string | null
           id?: string
           identifier?: string | null
           is_admin?: boolean
           is_banned?: boolean
+          phone_number?: string | null
           updated_at?: string | null
         }
         Relationships: []
