@@ -1,5 +1,4 @@
 
-
 export type Json =
   | string
   | number
@@ -57,7 +56,22 @@ export interface Database {
           text?: string
           user_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "comments_report_id_fkey"
+            columns: ["report_id"]
+            isOneToOne: false
+            referencedRelation: "reports"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "comments_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       evidence_files: {
         Row: {
@@ -84,7 +98,15 @@ export interface Database {
           report_id?: string
           size?: number | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "evidence_files_report_id_fkey"
+            columns: ["report_id"]
+            isOneToOne: false
+            referencedRelation: "reports"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       profiles: {
         Row: {
@@ -156,7 +178,15 @@ export interface Database {
           title?: string
           title_description_tokens?: unknown | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "reports_reported_by_id_fkey"
+            columns: ["reported_by_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
       }
     }
     Views: {
