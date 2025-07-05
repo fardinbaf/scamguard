@@ -1,5 +1,5 @@
 import { supabase } from '../lib/supabase';
-import { Report, ReportFilters, Comment, ReportStatus, EvidenceFile } from '../types';
+import { Report, ReportFilters, Comment, ReportStatus, EvidenceFile, TargetType, ReportCategory } from '../types';
 import { Database } from '../lib/database.types';
 
 const BUCKET_NAME = 'evidence';
