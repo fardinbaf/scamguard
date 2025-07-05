@@ -1,16 +1,10 @@
 import { supabase } from '../lib/supabase';
 import { Report, ReportFilters, Comment, ReportStatus, EvidenceFile } from '../types';
+import { Database } from '../lib/database.types';
 
 const BUCKET_NAME = 'evidence';
 
-// Helper type for raw data from Supabase to avoid 'any'
-interface SupabaseEvidenceFile {
-    id: string;
-    file_path: string;
-    original_name: string;
-    mime_type: string | null;
-    size: number | null;
-}
+type SupabaseEvidenceFile = Database['public']['Tables']['evidence_files']['Row'];
 
 // --- Mapper ---
 const toReport = (r: any): Report => {
@@ -63,7 +57,7 @@ const uploadEvidenceFiles = async (reportId: string, files: File[]): Promise<Evi
     };
   });
 
-  const evidenceData = await Promise.all(uploadPromises);
+  const evidenceData: Database['public']['Tables']['evidence_files']['Insert'][] = await Promise.all(uploadPromises);
   
   // Batch insert evidence metadata into the database
   const { data: insertedFiles, error: insertError } = await supabase
@@ -110,7 +104,10 @@ export const getReports = async (filters?: ReportFilters): Promise<Report[]> => 
         // Non-admins should only see approved reports if no other status is set
         const { data: { user } } = await supabase.auth.getUser();
         if (user) {
-            const { data: profile } = await supabase.from('profiles').select('is_admin').eq('id', user.id).single();
+            const { data: profile, error: profileError } = await supabase.from('profiles').select('is_admin').eq('id', user.id).single();
+            if (profileError && profileError.code !== 'PGRST116') {
+              console.error("Could not check admin status, defaulting to public view.", profileError);
+            }
             if (!profile?.is_admin && !filters.status) {
                  query = query.eq('status', ReportStatus.APPROVED);
             }
@@ -139,6 +136,7 @@ export const getReportById = async (id: string): Promise<Report | undefined> => 
 
   if (error) {
     console.error("Error fetching report by ID: ", error);
+    if(error.code === 'PGRST116') return undefined; // Not found is not a throw-worthy error
     throw new Error(error.message);
   }
   if (!data) return undefined;
@@ -146,14 +144,30 @@ export const getReportById = async (id: string): Promise<Report | undefined> => 
   return toReport(data);
 };
 
+export const getReportsByUserId = async (userId: string): Promise<Report[]> => {
+  const query = supabase
+    .from('reports')
+    .select(`
+      *,
+      profiles ( identifier )
+    `)
+    .eq('reported_by_id', userId)
+    .order('created_at', { ascending: false });
+
+  const { data, error } = await query;
+  if (error) throw new Error(error.message);
+
+  return (data || []).map(toReport);
+};
+
 export const addReport = async (formData: FormData): Promise<Report> => {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) throw new Error("You must be logged in to submit a report.");
 
-  const newReportData = {
+  const newReportData: Database['public']['Tables']['reports']['Insert'] = {
     title: formData.get('title') as string,
-    target_type: formData.get('targetType') as string,
-    category: formData.get('category') as string,
+    target_type: formData.get('targetType') as TargetType,
+    category: formData.get('category') as ReportCategory,
     description: formData.get('description') as string,
     contact_info: formData.get('contactInfo') as string,
     reported_by_id: user.id,
@@ -222,7 +236,7 @@ export const getCommentsByReportId = async (reportId: string): Promise<Comment[]
     .order('created_at', { ascending: true });
 
   if (error) throw new Error(error.message);
-  return data as Comment[];
+  return (data || []) as unknown as Comment[];
 };
 
 export const addComment = async (
@@ -233,17 +247,19 @@ export const addComment = async (
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) throw new Error("You must be logged in to comment.");
   
-  const { data: newComment, error } = await supabase
-    .from('comments')
-    .insert({
+  const newCommentData: Database['public']['Tables']['comments']['Insert'] = {
       report_id: reportId,
       user_id: user.id,
       text,
       is_anonymous: isAnonymous,
-    })
+  };
+
+  const { data: newComment, error } = await supabase
+    .from('comments')
+    .insert(newCommentData)
     .select(`*, profiles(identifier)`)
     .single();
 
   if (error) throw new Error(error.message);
-  return newComment as Comment;
+  return newComment as unknown as Comment;
 };
